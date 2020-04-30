@@ -6,9 +6,11 @@ from nltk.corpus import wordnet as wn
 from nltk.corpus import stopwords
 lema=WordNetLemmatizer()
 
+#filter required words from stop words
 words_required=['not','neither','never','nope','do','can','will','shall']
 stop_words=[i for i in stopwords.words('english') if i not in words_required ]
 
+#expand words like don't, won't etc
 def eng_connections(list):
     ex_words={"'m":'am',"n't":'not',"'d":'had',"'s":'is',"'ll":'will',"'ve":'have',"'re":'are'}
     main_words={'sha':'shall','wo':'will','ca':'can'}
