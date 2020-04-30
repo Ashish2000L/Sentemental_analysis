@@ -36,7 +36,6 @@ def sent(string):
     req_pos_tags=['N','J','R','V']
     tokeniz=word_tokenize(string) #to tokenize words
     newlst=eng_connections(tokeniz) #handle words like don't, won't, counldn't etc.
-    print(newlst)
     sit=[x.lower() for x in newlst] #all words in lowercase
     symb="!|\#$%^&*()+=-_~`<>.,?/:;{}[]"
     sym=[i for i in sit if i not in list(symb)] #Removed symbols
