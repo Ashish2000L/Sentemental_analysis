@@ -20,7 +20,7 @@ class update:
                     file.write(str(input('Enter your text: ')))
                 except FileExistsError as fxe:
                     print(fxe, '\n unnable to open file')
-                    return False
+                    exit(0)
                 else:
                     print("\nFile updated successfully :)")
             else :
@@ -28,10 +28,7 @@ class update:
         else:
             print('\n Document updated successfully :)')
         finally:
-            try:
-                file.close()
-            except :
-                exit(0)
+            file.close()
 
     #append negative.txt
     def appendneg(letter=None):
