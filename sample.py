@@ -43,8 +43,7 @@ SVC_classifier=SVC()
 LSVC_classifier=LinearSVC()
 NSVC_classifier=NuSVC()
 
-
-
+print('Working on it...')
 #this is how we find accuracy
 '''gnb.fit(X_train.toarray(),Y_train)
 Y_pred_gnb=gnb.predict(X_test.toarray())
@@ -53,11 +52,11 @@ print("Accuracy of GaussianNB: ",metrics.accuracy_score(Y_test,Y_pred_gnb)*100)'
 clf.fit(X_train.toarray(),Y_train)
 
 BNB_classifier.fit(X_train.toarray(),Y_train)
-
+print("please Don't refresh")
 LR_classifier.fit(X_train.toarray(),Y_train)
 
 SGDC_classifier.fit(X_train.toarray(),Y_train)
-
+print('Almost done!!!')
 LSVC_classifier.fit(X_train.toarray(),Y_train)
 
 #function to pass the string

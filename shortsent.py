@@ -4,6 +4,7 @@ from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
 from nltk.corpus import wordnet as wn
 from nltk.corpus import stopwords
+from update_TXT_files import update as up
 lema=WordNetLemmatizer()
 
 #filter required words from stop words
@@ -32,6 +33,10 @@ def eng_connections(list):
     return z
 
 def sent(string):
+    lst=[]
+    #update users data to User_data.txt
+    if not up.userdata(string):
+        up.User_appnd(string)
     dict={'N':wn.NOUN,'J':wn.ADJ,'R':wn.ADV,'V':wn.VERB}
     req_pos_tags=['N','J','R','V']
     tokeniz=word_tokenize(string) #to tokenize words
@@ -41,7 +46,12 @@ def sent(string):
     sym=[i for i in sit if i not in list(symb)] #Removed symbols
     stop=[i for i in sym if i not in stop_words] #removed stopwords
     tokens=nltk.pos_tag(stop) #added pos to list
-    lst=[lema.lemmatize(i[0],dict.get(i[1][0])) for i in tokens if i[1][0] in req_pos_tags] #lemmatized list
+    #lemitizing the text
+    for i in tokens:
+        if i[1][0] in req_pos_tags:
+            lst.append(lema.lemmatize(i[0],dict.get(i[1][0])))
+        else:
+            lst.append(i[0])
     str=''
     for i in lst:
         str=str+' '+i  #to make list to string

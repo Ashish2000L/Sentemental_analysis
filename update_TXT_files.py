@@ -1,61 +1,34 @@
-import time
+from nltk.tokenize import word_tokenize
 accept=['yes','affermative','ofcorse','sure','y']
-success=False
+def File_read():
+    try:
+        file_red=open('User_data.txt','r')
+        file_red.seek(0)
+    except FileNotFoundError:
+        print(FileNotFoundError)
+    else:
+        for i in file_red:
+            yield (i)
+
 
 class update:
     #append positive.txt
-    def appendpos(letter=None):
-        start=time.time()
+    def User_appnd(Text):
         try:
-            file=open('positive.txt','a')
-            file.write('\n1\t')
-            file.write(str(input("Write your text here: ")))
+            file=open('User_data.txt','a')
+            file.write('\n')
+            file.write(Text)
         except FileNotFoundError as fnfe:
             print(fnfe)
-            inpt = str(input('\n would you like to make new file!!'))
-            if inpt.lower() in accept:
-                try:
-                    file = open('positive.txt', 'x')
-                    file.write('\n1\t')
-                    file.write(str(input('Enter your text: ')))
-                except FileExistsError as fxe:
-                    print(fxe, '\n unnable to open file')
-                    exit(0)
-                else:
-                    print("\nFile updated successfully :)")
-            else :
-                print('Thank you, Have a nice day!!')
         else:
             print('\n Document updated successfully :)')
-        finally:
-            file.close()
-
-    #append negative.txt
-    def appendneg(letter=None):
-        try:
-            file=open('negative.txt','a')
-            file.write('\n0\t')
-            file.write(input('write your Text here: '))
-        except FileNotFoundError as fnfe:
-            print(fnfe)
-            inpt = str(input('\n would you like to make new file!!'))
-            if inpt.lower() in accept:
-                try:
-                    file = open('negative.txt', 'x')
-                    file.write('\n1\t')
-                    file.write(str(input('Enter your text: ')))
-                except FileExistsError as fxe:
-                    print(fxe, '\n unnable to open file')
-        else:
-            print("Document updated succesfully")
-
-        finally:
             file.close()
 
     #add new file
-    def newfile(name=None):
-        while(success!=True):
-            name = str(input("Enter the name of the file: "))
+    def newfile(File_name):
+        success=False
+        while(not success):
+            name=File_name
             name = name + '.txt'
             try:
                 file = open(name, 'x')
@@ -69,8 +42,9 @@ class update:
                 file.close()
 
     #copy data from one file to another
-    def cpyfile(text1=None):
-        while(success!=True):
+    def cpyfile(text=None):
+        success=False
+        while(not success):
             file_addr=str(input('Enter file address (copy from): '))
             cpy_to=str(input('Enter of file (copy to): '))
             try:
@@ -109,11 +83,15 @@ class update:
                         file1.close()
                         file2.close()
 
-
-
-
-
-
-
-
+    def userdata(Text):
+        success=False
+        line=File_read()
+        while(not success):
+            try:
+                lne=next(line)
+                if word_tokenize(Text)==word_tokenize(lne):
+                    return True
+            except StopIteration as si:
+                print('Already Exist!!')
+                return False
 
