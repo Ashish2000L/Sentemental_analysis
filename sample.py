@@ -20,13 +20,13 @@ dp2=pd.read_csv('negative.txt', sep='\t', names=['likes', 'text'])
 concat=pd.concat([dp1,dp2])
 
 Y=concat.likes
-'''
+
 #vecterizing the data
 stops=set(stopwords.words('english'))
 vect=TfidfVectorizer(use_idf=True, lowercase=True, strip_accents='ascii',stop_words=stops)
-'''
-X=vect.fit_transform(concat.text)
 
+X=vect.fit_transform(concat.text)
+'''
 #spliting the data
 X_train,X_test,Y_train,Y_test=train_test_split(X,Y,random_state=5)
 
@@ -81,7 +81,6 @@ lsvc_classifier=open('LSVC_clf.pickle','rb')
 LSVC_classifier=pickle.load(lsvc_classifier)
 lsvc_classifier.close()
 
-print('lsvc comlete')
 #function to pass the string
 votes=[]
 def sentence(sent):

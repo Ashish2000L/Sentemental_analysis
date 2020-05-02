@@ -1,4 +1,5 @@
 from nltk.tokenize import word_tokenize
+from sample import sentence as se
 accept=['yes','affermative','ofcorse','sure','y']
 def File_read():
     try:
@@ -16,8 +17,8 @@ class update:
     def User_appnd(Text):
         try:
             file=open('User_data.txt','a')
-            file.write('\n')
             file.write(Text)
+            file.write('\n')
         except FileNotFoundError as fnfe:
             print(fnfe)
         else:
@@ -90,8 +91,8 @@ class update:
             try:
                 lne=next(line)
                 if word_tokenize(Text)==word_tokenize(lne):
+                    print('Already Exist!!')
                     return True
-            except StopIteration as si:
-                print('Already Exist!!')
+            except StopIteration :
                 return False
 
