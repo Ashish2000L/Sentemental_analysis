@@ -1,5 +1,6 @@
 from nltk.tokenize import word_tokenize
-from sample import sentence as se
+import time
+
 accept=['yes','affermative','ofcorse','sure','y']
 def File_read():
     try:
@@ -22,7 +23,7 @@ class update:
         except FileNotFoundError as fnfe:
             print(fnfe)
         else:
-            print('\n Document updated successfully :)')
+            print('Document updated successfully :)')
             file.close()
 
     #add new file
@@ -86,13 +87,17 @@ class update:
 
     def userdata(Text):
         success=False
+        user_time=time.time()
         line=File_read()
         while(not success):
             try:
                 lne=next(line)
                 if word_tokenize(Text)==word_tokenize(lne):
                     print('Already Exist!!')
-                    return True
+                    final_time=time.time()-user_time
+                    return True,final_time
             except StopIteration :
-                return False
+                final_time = time.time() - user_time
+                return False,final_time
+
 

@@ -11,7 +11,6 @@ import pickle
 import numpy as np
 import time
 
-start=time.time()
 
 #get the detailed data
 dp1=pd.read_csv('positive.txt', sep='\t', names=['likes', 'text'])
@@ -84,6 +83,7 @@ lsvc_classifier.close()
 #function to pass the string
 votes=[]
 def sentence(sent):
+    sample_start = time.time()
     movie_review_vect=vect.transform(np.array([sent]))
     review = MNB_classifier.predict(movie_review_vect)
     votes.append(review)
@@ -105,5 +105,6 @@ def sentence(sent):
         res = 'Positive'
     elif res == 0:
         res = 'Negative'
-    return res, conf*100
-print('Time taken to interpret: ',time.time()-start)
+    sample_time = time.time() - sample_start
+    return res, conf*100,sample_time
+
