@@ -4,7 +4,7 @@ from sklearn import naive_bayes
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import MultinomialNB, BernoulliNB
 from sklearn.linear_model import LogisticRegression, SGDClassifier
-from sklearn.svm import SVC, LinearSVC, NuSVC
+from sklearn.svm import  LinearSVC, NuSVC
 from nltk.corpus import stopwords
 from statistics import mode
 import pickle
@@ -84,16 +84,16 @@ lsvc_classifier.close()
 votes=[]
 def sentence(sent):
     sample_start = time.time()
-    movie_review_vect=vect.transform(np.array([sent]))
-    review = MNB_classifier.predict(movie_review_vect)
+    vectors=vect.transform(np.array([sent]))
+    review = MNB_classifier.predict(vectors)
     votes.append(review)
-    review = BNB_classifier.predict(movie_review_vect)
+    review = BNB_classifier.predict(vectors)
     votes.append(review)
-    review = LR_classifier.predict(movie_review_vect)
+    review = LR_classifier.predict(vectors)
     votes.append(review)
-    review = SGDClassifier.predict(LSVC_classifier,movie_review_vect)
+    review = SGDC_classifier.predict(LSVC_classifier,vectors)
     votes.append(review)
-    review = LSVC_classifier.predict(movie_review_vect)
+    review = LSVC_classifier.predict(vectors)
     votes.append(review)
     list = []
     for i in votes:
