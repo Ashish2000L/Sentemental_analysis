@@ -13,19 +13,19 @@ import time
 
 
 #get the detailed data
-dp1=pd.read_csv('positive.txt', sep='\t', names=['likes', 'text'])
-dp2=pd.read_csv('negative.txt', sep='\t', names=['likes', 'text'])
+concat=pd.read_csv('data.csv')
+#dp2=pd.read_csv('negative.txt', sep='\t', names=['likes', 'text'])
 
-concat=pd.concat([dp1,dp2])
+#concat=pd.concat([dp1,dp2])
 
-Y=concat.likes
+Y=concat.Rev
 
 #vecterizing the data
 stops=set(stopwords.words('english'))
-vect=TfidfVectorizer(use_idf=True, lowercase=True, strip_accents='ascii',stop_words=stops)
+vect=TfidfVectorizer(use_idf=True, lowercase=True, strip_accents='ascii',stop_words=stops,ngram_range=(1,3),)
 
-X=vect.fit_transform(concat.text)
-'''
+X=vect.fit_transform(concat.Text)
+
 #spliting the data
 X_train,X_test,Y_train,Y_test=train_test_split(X,Y,random_state=5)
 
@@ -38,46 +38,46 @@ BNB_classifier=BernoulliNB()
 LR_classifier=LogisticRegression()
 SGDC_classifier=SGDClassifier()
 LSVC_classifier=LinearSVC()
-'''
+
 
 #this is how we find accuracy
 '''gnb.fit(X_train.toarray(),Y_train)
 Y_pred_gnb=gnb.predict(X_test.toarray())
 print("Accuracy of GaussianNB: ",metrics.accuracy_score(Y_test,Y_pred_gnb)*100)'''
 
-#MNB_classifier.fit(X_train.toarray(),Y_train)
+MNB_classifier.fit(X_train.toarray(),Y_train)
 
 #pickled and loaded the MNB_classifier
-multinomial_classifier=open('multinom_clf.pickle','rb')
-MNB_classifier=pickle.load(multinomial_classifier)
+multinomial_classifier=open('multinom_clf.pickle','wb')
+pickle.dump(MultinomialNB,multinomial_classifier)
 multinomial_classifier.close()
 
-#BNB_classifier.fit(X_train.toarray(),Y_train)
+BNB_classifier.fit(X_train.toarray(),Y_train)
 
 #pickled and loaded the BNB_classifier
-Bernauli_classifier=open('bernauli_clf.pickle','rb')
-BNB_classifier=pickle.load(Bernauli_classifier)
+Bernauli_classifier=open('bernauli_clf.pickle','wb')
+pickle.dump(BNB_classifier,Bernauli_classifier)
 Bernauli_classifier.close()
 
-#LR_classifier.fit(X_train.toarray(),Y_train)
+LR_classifier.fit(X_train.toarray(),Y_train)
 
 #pickled and loaded the LR_classifier
-logistic_classifier=open('logistic_clf.pickle','rb')
-LR_classifier=pickle.load(logistic_classifier)
+logistic_classifier=open('logistic_clf.pickle','wb')
+pickle.dump(LR_classifier,logistic_classifier)
 logistic_classifier.close()
 
-#SGDC_classifier.fit(X_train.toarray(),Y_train)
+SGDC_classifier.fit(X_train.toarray(),Y_train)
 
 #pickled and loaded the SGDC_classifier
-sgdc_classifier=open('SGDC_clf.pickle','rb')
-SGDC_classifier=pickle.load(sgdc_classifier)
+sgdc_classifier=open('SGDC_clf.pickle','wb')
+pickle.dump(SGDC_classifier,sgdc_classifier)
 sgdc_classifier.close()
 
-#LSVC_classifier.fit(X_train.toarray(),Y_train)
+LSVC_classifier.fit(X_train.toarray(),Y_train)
 
 #pickled and loaded the LSVC_classifier
-lsvc_classifier=open('LSVC_clf.pickle','rb')
-LSVC_classifier=pickle.load(lsvc_classifier)
+lsvc_classifier=open('LSVC_clf.pickle','wb')
+pickle.dump(LSVC_classifier,lsvc_classifier)
 lsvc_classifier.close()
 
 #function to pass the string
@@ -91,7 +91,7 @@ def sentence(sent):
     votes.append(review)
     review = LR_classifier.predict(vectors)
     votes.append(review)
-    review = SGDC_classifier.predict(LSVC_classifier,vectors)
+    review = SGDC_classifier.predict(vectors)
     votes.append(review)
     review = LSVC_classifier.predict(vectors)
     votes.append(review)
@@ -108,3 +108,5 @@ def sentence(sent):
     sample_time = time.time() - sample_start
     return res, conf*100,sample_time
 
+
+print(sentence('corona is dangerous'))

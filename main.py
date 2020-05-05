@@ -7,7 +7,7 @@ import time
 import pandas as pd
 
 #def word():
-#    data=open('data.txt','r')
+#    data=open('data.csv','r')
 #    for l in data:
 #        yield l
 #success=True
