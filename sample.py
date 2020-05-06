@@ -93,10 +93,21 @@ NuSVC_classifier.fit(X_train.toarray(),Y_train)
 Y_pred_NuSVC=NuSVC_classifier.predict(X_test.toarray())
 #print("Accuracy of NuSVC_classifier: ",metrics.accuracy_score(Y_test,Y_pred_NuSVC)*100)
 
+#pickled nusvc_classifier
+nusvc_classifier=open('NuSVC_clf.pickle','wb')
+pickle.dump(NuSVC_classifier,nusvc_classifier)
+nusvc_classifier.close()
+
 SVC_classifier=SVC()
 SVC_classifier.fit(X_train.toarray(),Y_train)
 Y_pred_SVC=SVC_classifier.predict(X_test.toarray())
 #print("Accuracy of SVC_classifier: ",metrics.accuracy_score(Y_test,Y_pred_SVC)*100)
+
+#pickled svc_classifier
+svc_classifier=open('svc_clf.pickle','wb')
+pickle.dump(SVC_classifier,svc_classifier)
+svc_classifier.close()
+
 #function to pass the string
 votes=[]
 def sentence(sent):
@@ -121,12 +132,12 @@ def sentence(sent):
     list = []
     for i in votes:
         list.append(i[0])
-    res = mode(list)
-    num = list.count(res)
-    conf = num / len(list)
+    #res = mode(list)
+    #num = list.count(res)
+    #conf = num / len(list)
     #if res == 1:
     #    res = 'Positive'
     #elif res == 0:
     #    res = 'Negative'
     #sample_time = time.time() - sample_start
-    return list,conf*100
+    return list

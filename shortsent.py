@@ -60,4 +60,4 @@ def sent(string):
         str=str+' '+i  #to make list to string
     str=str.lstrip(" ") #removed extra spaces
     final_loop = time.time()-loop_time
-    return str,final_loop,time2
+    return str

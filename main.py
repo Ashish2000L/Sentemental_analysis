@@ -55,19 +55,16 @@ from shortsent import sent
 #plt.legend()
 #plt.show()
 
-dp1=pd.read_csv('pos.csv',names=['Rev','Text'])
-dp2=pd.read_csv('neg.csv', names=['Rev','Text'])
-
-concat=pd.concat([dp1,dp2])
-
-Y=concat.Rev
+#dp1=pd.read_csv('pos.csv',names=['Rev','Text'])
+#dp2=pd.read_csv('neg.csv', names=['Rev','Text'])
+#
+#concat=pd.concat([dp1,dp2])
+#
+#Y=concat.Rev
 
 #vecterizing the data
 stops=set(stopwords.words('english'))
 vect=TfidfVectorizer(use_idf=True, lowercase=True, strip_accents='ascii',stop_words=stops,ngram_range=(1,3))
-
-#X=vect.fit_transform(concat.Text)
-
 
 lst=[]
 lst_neg=[]
@@ -85,9 +82,8 @@ def value(string1):
             lst_neg.append(z.decode())
         make_text_neg=txt.TextCollection(lst_neg)
         make_text=txt.TextCollection(lst)
-        output, shortsent_time, update_time = sent(string)
-        print(output)
-        result,confi=sentence(output)
+        output = sent(string)
+        result=sentence(output)
         for i in output.split(' '):
             if i not in lt:
                 lt[i]=make_text.tf_idf(i,output)
@@ -99,9 +95,9 @@ def value(string1):
         print('hello')
         print(ec)
     else:
-        return result,confi
+        return result
 x=str(input("Enter your text: "))
-result,confi=value(x)
+result=value(x)
 file=open('testing_pos.csv','w')
 file_neg=open('testing_neg.csv','w')
 for z in lt:
