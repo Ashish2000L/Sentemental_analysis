@@ -1,5 +1,4 @@
 from nltk.tokenize import word_tokenize
-import time
 
 accept=['yes','affermative','ofcorse','sure','y']
 def File_read():
@@ -87,17 +86,17 @@ class update:
 
     def userdata(Text):
         success=False
-        user_time=time.time()
+
         line=File_read()
         while(not success):
             try:
                 lne=next(line)
-                if word_tokenize(Text)==word_tokenize(lne):
+                if word_tokenize(str(Text))==word_tokenize(lne):
                     print('Already Exist!!')
-                    final_time=time.time()-user_time
-                    return True,final_time
+
+                    return True
             except StopIteration :
-                final_time = time.time() - user_time
-                return False,final_time
+
+                return False
 
 
