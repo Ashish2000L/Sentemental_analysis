@@ -7,6 +7,7 @@ from sample import sentence
 import  nltk.text as txt
 from statistics import mode
 from shortsent import sent
+from functools import reduce
 
 #vecterizing the data
 stops=set(stopwords.words('english'))
@@ -16,84 +17,97 @@ lst=[]
 lst_neg=[]
 
 def value(string1):
+    global result
     string=str(string1)
     lt_neg = {}
     lt = {}
     try:
-        file=open('pos.txt', 'rb')
-        file_next=open('neg.txt','rb')
+        file=open('neg.txt', 'rb')
+        file_next=open('pos.txt', 'rb')
 
-        for i in file:
-            lst.append(i.decode())
+        try:
+            for i in file:
+                lst.append(i.decode())
 
-        for z in file_next:
-            lst_neg.append(z.decode())
+            for z in file_next:
+                lst_neg.append(z.decode())
 
-        make_text_neg=txt.TextCollection(lst_neg)
+            make_text_neg=txt.TextCollection(lst_neg)
 
-        make_text=txt.TextCollection(lst)
+            make_text=txt.TextCollection(lst)
 
-        output = sent(string)
+            output = sent(string)
 
-        result=sentence(output)
+            result=sentence(output)
 
-        for i in output.split(' '):
-            if i not in lt:
-                lt[i]=make_text.tf_idf(i,output)
+            for i in output.split(' '):
+                if i not in lt:
+                    lt[i]=make_text.tf_idf(i,output)
 
-        for j in output.split(' '):
-            if j not in lt_neg:
-                lt_neg[j]=make_text_neg.tf_idf(j,output)
-    except Exception as ec:
-        print(ec)
+            for j in output.split(' '):
+                if j not in lt_neg:
+                    lt_neg[j]=make_text_neg.tf_idf(j,output)
+
+
+        except AssertionError as ass:
+            print("Cannot open file!!")
+            print(ass)
+
+    except FileNotFoundError as fnf:
+        print(fnf)
     else:
         return result,lt,lt_neg
-x=str(input("Enter your text: "))
-result,lt,lt_neg=value(x)
-file=open('testing_pos.csv','w')
-file_neg=open('testing_neg.csv','w')
-for z in lt:
-    file.write(z)
-    file.write(',')
-    file.write(str(lt.get(z)))
-    file.write('\n')
 
-for k in lt_neg:
-    file_neg.write(k)
-    file_neg.write(',')
-    file_neg.write(str(lt_neg.get(k)))
-    file_neg.write('\n')
-file.close()
-file_neg.close()
-pf_pos=pd.read_csv('testing_pos.csv', names=['words','tf_idf'])
-pf_neg=pd.read_csv('testing_neg.csv',names=['words','tf_idf'])
-#test = pf_pos.sort_values('tf_idf', ascending=False)#to short the values
-initial=len(pf_pos['words'])
-cf=pf_pos[pf_pos.tf_idf!=0.0]
-#print('percentage matching: ',((len(cf['words'])/initial)*100))
-pos_sum=sum(pf_pos['tf_idf'])
-neg_sum=sum(pf_neg['tf_idf'])
-total=neg_sum+pos_sum
-pos_percnt=(pos_sum/total)*100
-neg_percnt=(neg_sum/total)*100
-try:
-    res=mode(result)
-    confidance = result.count(res) / len(result)
-    if res == 1:
-        res = 'Positive'
-    else:
-        res = 'Negative'
-    print((res, confidance,len(result)))
-except Exception as e:
-    if pos_percnt>neg_percnt:
-        result.append(1)
-    else:
-        result.append(0)
-    res=mode(result)
-    confidance = result.count(res) / len(result)
-    if res == 1:
-        res = 'Positive'
-    else:
-        res = 'Negative'
-    print((res, confidance, len(result)))
+def final_output(string):
+    result,lt,lt_neg=value(string)
+    file=open('testing_pos.csv','w')
+    file_neg=open('testing_neg.csv','w')
+    #to get clear vizilization of each input words
+    for z in lt:
+        file.write(z)
+        file.write(',')
+        file.write(str(lt.get(z)))
+        file.write('\n')
 
+    for k in lt_neg:
+        file_neg.write(k)
+        file_neg.write(',')
+        file_neg.write(str(lt_neg.get(k)))
+        file_neg.write('\n')
+    file.close()
+    file_neg.close()
+    #to mannuly check value of pos and neg
+    pf_pos=pd.read_csv('testing_pos.csv', names=['words','tf_idf'])
+    pf_neg=pd.read_csv('testing_neg.csv',names=['words','tf_idf'])
+    pos_mult=reduce(lambda x,y:x*y,list(filter(lambda a:(a!=0),pf_pos['tf_idf'])))
+    neg_mult=reduce(lambda x,y:x*y,list(filter(lambda a:(a!=0),pf_neg['tf_idf'])))
+    total=neg_mult+pos_mult
+    pos_percnt=(pos_mult/total)*100
+    neg_percnt=(neg_mult/total)*100
+    try:
+        res=mode(result)
+        confidance = (result.count(res) / len(result))*100
+        if res == 1:
+            res = 'Positive'
+        else:
+            res = 'Negative'
+
+        if confidance >60:
+            print((res, confidance))
+        else:
+            print("Unable to predict try again!!")
+    except Exception as e:
+        if pos_percnt>neg_percnt:
+            result.append(1)
+        else:
+            result.append(0)
+        res=mode(result)
+        confidance = (result.count(res) / len(result))*100
+        if res == 1:
+            res = 'Positive'
+        else:
+            res = 'Negative'
+        if confidance > 60:
+            print((res, confidance))
+        else:
+            print("Unable to predict try again!!")
