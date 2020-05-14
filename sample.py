@@ -43,13 +43,18 @@ gnb.fit(X_train.toarray(),Y_train)
 Y_pred_gnb=gnb.predict(X_test.toarray())
 #print("Accuracy of GaussianNB: ",metrics.accuracy_score(Y_test,Y_pred_gnb)*100)
 
+#Gaussian pickled data
+gaussian_classifier=open('gaussian_clf.pickle','wb')
+pickle.dump(gnb,gaussian_classifier)
+gaussian_classifier.close()
+
 MNB_classifier.fit(X_train.toarray(),Y_train)
 Y_pred_MNB=MNB_classifier.predict(X_test.toarray())
 #print("Accuracy of MNB_classifier: ",metrics.accuracy_score(Y_test,Y_pred_MNB)*100)
 
 #pickled and loaded the MNB_classifier
 multinomial_classifier=open('multinom_clf.pickle','wb')
-pickle.dump(MultinomialNB,multinomial_classifier)
+pickle.dump(MNB_classifier,multinomial_classifier)
 multinomial_classifier.close()
 
 BNB_classifier.fit(X_train.toarray(),Y_train)
@@ -111,7 +116,6 @@ svc_classifier.close()
 #function to pass the string
 votes=[]
 def sentence(sent):
-    sample_start = time.time()
     vectors=vect.transform(np.array([sent]))#np.array([sent])
     review=gnb.predict(vectors.toarray())
     votes.append(review)

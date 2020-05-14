@@ -37,7 +37,7 @@ def eng_connections(list):
 def sent(string):
     lst=[]
     #update users data to User_data.txt
-    result,time2= up.userdata(string)
+    result= up.userdata(string)
     if not result:
         up.User_appnd(string)
     dict={'N':wn.NOUN,'J':wn.ADJ,'R':wn.ADV,'V':wn.VERB}
