@@ -1,4 +1,3 @@
-#In this file we have we just make short sentence
 import nltk
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize

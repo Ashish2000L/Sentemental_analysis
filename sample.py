@@ -1,16 +1,13 @@
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn import naive_bayes, metrics
+#from sklearn import naive_bayes, metrics
 from sklearn.model_selection import train_test_split
-from sklearn.naive_bayes import MultinomialNB, BernoulliNB, GaussianNB
-from sklearn.linear_model import LogisticRegression, SGDClassifier
-from sklearn.svm import LinearSVC, NuSVC, SVC
+#from sklearn.naive_bayes import MultinomialNB, BernoulliNB, GaussianNB
+#from sklearn.linear_model import LogisticRegression, SGDClassifier
+#from sklearn.svm import LinearSVC, NuSVC, SVC
 from nltk.corpus import stopwords
-from statistics import mode
 import pickle
 import numpy as np
-import time
-
 
 #get the detailed data
 dp1=pd.read_csv('pos.csv',names=['Rev','Text'])
@@ -29,88 +26,51 @@ X=vect.fit_transform(concat.Text)
 #spliting the data
 X_train,X_test,Y_train,Y_test=train_test_split(X,Y,random_state=5)
 
-#training using MultinomialNB
-gnb=GaussianNB()
-MNB_classifier=MultinomialNB()
-BNB_classifier=BernoulliNB()
-LR_classifier=LogisticRegression()
-SGDC_classifier=SGDClassifier()
-LSVC_classifier=LinearSVC()
+#load Gaussian classifier
+gaussain_classifier=open('gaussian_clf.pickle','rb')
+gnb=pickle.load(gaussain_classifier)
+gaussain_classifier.close()
 
 
-#this is how we find accuracy
-gnb.fit(X_train.toarray(),Y_train)
-Y_pred_gnb=gnb.predict(X_test.toarray())
-#print("Accuracy of GaussianNB: ",metrics.accuracy_score(Y_test,Y_pred_gnb)*100)
-
-#Gaussian pickled data
-gaussian_classifier=open('gaussian_clf.pickle','wb')
-pickle.dump(gnb,gaussian_classifier)
-gaussian_classifier.close()
-
-MNB_classifier.fit(X_train.toarray(),Y_train)
-Y_pred_MNB=MNB_classifier.predict(X_test.toarray())
-#print("Accuracy of MNB_classifier: ",metrics.accuracy_score(Y_test,Y_pred_MNB)*100)
-
-#pickled and loaded the MNB_classifier
-multinomial_classifier=open('multinom_clf.pickle','wb')
-pickle.dump(MNB_classifier,multinomial_classifier)
+#load multinomial pickle
+multinomial_classifier=open('multinom_clf.pickle','rb')
+MNB_classifier=pickle.load(multinomial_classifier)
 multinomial_classifier.close()
 
-BNB_classifier.fit(X_train.toarray(),Y_train)
-Y_pred_BNB=BNB_classifier.predict(X_test.toarray())
-#print("Accuracy of BNB_classifier: ",metrics.accuracy_score(Y_test,Y_pred_BNB)*100)
 
-#pickled and loaded the BNB_classifier
-Bernauli_classifier=open('bernauli_clf.pickle','wb')
-pickle.dump(BNB_classifier,Bernauli_classifier)
-Bernauli_classifier.close()
+#load bernauli pickle
+bernauli_classifier=open("bernauli_clf.pickle",'rb')
+BNB_classifier=pickle.load(bernauli_classifier)
+bernauli_classifier.close()
 
-LR_classifier.fit(X_train.toarray(),Y_train)
-Y_pred_LR=LR_classifier.predict(X_test.toarray())
-#print("Accuracy of LR_classifier: ",metrics.accuracy_score(Y_test,Y_pred_LR)*100)
 
-#pickled and loaded the LR_classifier
-logistic_classifier=open('logistic_clf.pickle','wb')
-pickle.dump(LR_classifier,logistic_classifier)
-logistic_classifier.close()
+#load logical regression classifier
+lr_classifier=open('logistic_clf.pickle','rb')
+LR_classifier=pickle.load(lr_classifier)
+lr_classifier.close()
 
-SGDC_classifier.fit(X_train.toarray(),Y_train)
-Y_pred_SGDC=SGDC_classifier.predict(X_test.toarray())
-#print("Accuracy of SGDC_classifier: ",metrics.accuracy_score(Y_test,Y_pred_SGDC)*100)
 
-#pickled and loaded the SGDC_classifier
-sgdc_classifier=open('SGDC_clf.pickle','wb')
-pickle.dump(SGDC_classifier,sgdc_classifier)
-sgdc_classifier.close()
+#load sgvc classifier
+svgc_classifier=open('SGDC_clf.pickle','rb')
+SGDC_classifier=pickle.load(svgc_classifier)
+svgc_classifier.close()
 
-LSVC_classifier.fit(X_train.toarray(),Y_train)
-Y_pred_LSVC=LSVC_classifier.predict(X_test.toarray())
-#print("Accuracy of LSVC_classifier: ",metrics.accuracy_score(Y_test,Y_pred_LSVC)*100)
 
-#pickled and loaded the LSVC_classifier
-lsvc_classifier=open('LSVC_clf.pickle','wb')
-pickle.dump(LSVC_classifier,lsvc_classifier)
+#load lsvc classifier
+lsvc_classifier=open('LSVC_clf.pickle','rb')
+LSVC_classifier=pickle.load(lsvc_classifier)
 lsvc_classifier.close()
 
-NuSVC_classifier=NuSVC()
-NuSVC_classifier.fit(X_train.toarray(),Y_train)
-Y_pred_NuSVC=NuSVC_classifier.predict(X_test.toarray())
-#print("Accuracy of NuSVC_classifier: ",metrics.accuracy_score(Y_test,Y_pred_NuSVC)*100)
 
-#pickled nusvc_classifier
-nusvc_classifier=open('NuSVC_clf.pickle','wb')
-pickle.dump(NuSVC_classifier,nusvc_classifier)
+#load svc classifier
+nusvc_classifier=open('NuSVC_clf.pickle','rb')
+NuSVC_classifier=pickle.load(nusvc_classifier)
 nusvc_classifier.close()
 
-SVC_classifier=SVC()
-SVC_classifier.fit(X_train.toarray(),Y_train)
-Y_pred_SVC=SVC_classifier.predict(X_test.toarray())
-#print("Accuracy of SVC_classifier: ",metrics.accuracy_score(Y_test,Y_pred_SVC)*100)
 
-#pickled svc_classifier
-svc_classifier=open('svc_clf.pickle','wb')
-pickle.dump(SVC_classifier,svc_classifier)
+#load svc classifier
+svc_classifier=open('svc_clf.pickle','rb')
+SVC_classifier=pickle.load(svc_classifier)
 svc_classifier.close()
 
 #function to pass the string
@@ -136,12 +96,4 @@ def sentence(sent):
     list = []
     for i in votes:
         list.append(i[0])
-    #res = mode(list)
-    #num = list.count(res)
-    #conf = num / len(list)
-    #if res == 1:
-    #    res = 'Positive'
-    #elif res == 0:
-    #    res = 'Negative'
-    #sample_time = time.time() - sample_start
     return list
