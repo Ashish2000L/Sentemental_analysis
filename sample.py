@@ -1,10 +1,10 @@
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
-#from sklearn import naive_bayes, metrics
+from sklearn import naive_bayes, metrics
 from sklearn.model_selection import train_test_split
-#from sklearn.naive_bayes import MultinomialNB, BernoulliNB, GaussianNB
-#from sklearn.linear_model import LogisticRegression, SGDClassifier
-#from sklearn.svm import LinearSVC, NuSVC, SVC
+from sklearn.naive_bayes import MultinomialNB, BernoulliNB, GaussianNB
+from sklearn.linear_model import LogisticRegression, SGDClassifier
+from sklearn.svm import LinearSVC, NuSVC, SVC
 from nltk.corpus import stopwords
 import pickle
 import numpy as np
@@ -26,51 +26,81 @@ X=vect.fit_transform(concat.Text)
 #spliting the data
 X_train,X_test,Y_train,Y_test=train_test_split(X,Y,random_state=5)
 
+gnb=GaussianNB()
+MNB_classifier=MultinomialNB()
+BNB_classifier=BernoulliNB()
+LR_classifier=LogisticRegression()
+SGDC_classifier=SGDClassifier()
+LSVC_classifier=LinearSVC()
+NuSVC_classifier=NuSVC()
+SVC_classifier=SVC()
 #load Gaussian classifier
-gaussain_classifier=open('gaussian_clf.pickle','rb')
-gnb=pickle.load(gaussain_classifier)
+gaussain_classifier=open('gaussian_clf.pickle','wb')
+pickle.dump(gnb,gaussain_classifier)
 gaussain_classifier.close()
 
 
 #load multinomial pickle
-multinomial_classifier=open('multinom_clf.pickle','rb')
-MNB_classifier=pickle.load(multinomial_classifier)
+#multinomial_classifier=open('multinom_clf.pickle','rb')
+#MNB_classifier=pickle.load(multinomial_classifier)
+#multinomial_classifier.close()
+#
+multinomial_classifier=open('multinom_clf.pickle','wb')
+pickle.dump(MNB_classifier,multinomial_classifier)
 multinomial_classifier.close()
 
+##load bernauli pickle
+#bernauli_classifier=open("bernauli_clf.pickle",'rb')
+#BNB_classifier=pickle.load(bernauli_classifier)
+#bernauli_classifier.close()
 
-#load bernauli pickle
-bernauli_classifier=open("bernauli_clf.pickle",'rb')
-BNB_classifier=pickle.load(bernauli_classifier)
+bernauli_classifier=open('bernauli_clf.pickle','wb')
+pickle.dump(BNB_classifier,bernauli_classifier)
 bernauli_classifier.close()
 
-
-#load logical regression classifier
-lr_classifier=open('logistic_clf.pickle','rb')
-LR_classifier=pickle.load(lr_classifier)
+##load logical regression classifier
+#lr_classifier=open('logistic_clf.pickle','rb')
+#LR_classifier=pickle.load(lr_classifier)
+#lr_classifier.close()
+#
+lr_classifier=open('logistic_clf.pickle','wb')
+pickle.dump(LR_classifier,lr_classifier)
 lr_classifier.close()
 
-
-#load sgvc classifier
-svgc_classifier=open('SGDC_clf.pickle','rb')
-SGDC_classifier=pickle.load(svgc_classifier)
+##load sgvc classifier
+#svgc_classifier=open('SGDC_clf.pickle','rb')
+#SGDC_classifier=pickle.load(svgc_classifier)
+#svgc_classifier.close()
+#
+svgc_classifier=open('SGDC_clf.pickle','wb')
+pickle.dump(SGDC_classifier,svgc_classifier)
 svgc_classifier.close()
 
-
-#load lsvc classifier
-lsvc_classifier=open('LSVC_clf.pickle','rb')
-LSVC_classifier=pickle.load(lsvc_classifier)
+##load lsvc classifier
+#lsvc_classifier=open('LSVC_clf.pickle','rb')
+#LSVC_classifier=pickle.load(lsvc_classifier)
+#lsvc_classifier.close()
+#
+lsvc_classifier=open('LSVC_clf.pickle','wb')
+pickle.dump(LSVC_classifier,lsvc_classifier)
 lsvc_classifier.close()
 
+##load svc classifier
+#nusvc_classifier=open('NuSVC_clf.pickle','rb')
+#NuSVC_classifier=pickle.load(nusvc_classifier)
+#nusvc_classifier.close()
 
-#load svc classifier
-nusvc_classifier=open('NuSVC_clf.pickle','rb')
-NuSVC_classifier=pickle.load(nusvc_classifier)
+nusvc_classifier=open('NuSVC_clf.pickle','wb')
+pickle.dump(NuSVC_classifier,nusvc_classifier)
 nusvc_classifier.close()
 
-
-#load svc classifier
-svc_classifier=open('svc_clf.pickle','rb')
-SVC_classifier=pickle.load(svc_classifier)
+##load svc classifier
+#svc_classifier=open('svc_clf.pickle','rb')
+#SVC_classifier=pickle.load(svc_classifier)
+#svc_classifier.close()
+#
+svc_classifier=open('svc_clf.pickle','wb')
+pickle.dump(SVC_classifier,svc_classifier)
 svc_classifier.close()
 
 #function to pass the string
