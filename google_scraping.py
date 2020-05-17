@@ -2,6 +2,7 @@
 import numpy
 #import pytesseract
 #from PIL import Image
+from interlink import final_output
 print("Choose the way you want to input the news: ")
 x = input("I for image and T for text: ")
 if x.upper() == "T":
@@ -66,21 +67,28 @@ if connect():
         article.nlp()
 
         # To extract title
-        print("News Title:")
-        print(article.title)
-        print("\n")
+        #print("News Title:")
+        #print(article.title)
+        #print("\n")
         # To extract complete Text of news
-        print("News Text:")
-        print(article.text)
-        print("\n")
+        #print("News Text:")
+        #print(article.text)
+        #print("\n")
         # To extract Summary of news
-        print("News Summary:")
-        print(article.summary)
-        print("\n")
+        #print("News Summary:")
+        #print(article.summary)
+        #print("\n")
 
         # To extract keywords of news
-        print("News Keywords:")
-        print(article.keywords)
+        #print("News Keywords:")
+        #print(article.keywords)
+        inpt = article.title
+        print(inpt)
+        try:
+            result, confidance = final_output(inpt)
+            print("Final result: ",result, confidance)
+        except Exception as ec:
+            print("\n Unable to find result, please try again later :) ")
 
 
 else:
