@@ -2,7 +2,8 @@ from shortsent import sent
 from nltk.corpus import stopwords
 import nltk
 from gensim.models import Word2Vec
-from scipy.spatial.distance import cosine
+from scipy.stats import cosine
+#from scipy.spatial.distance import cosine
 import gensim.downloader as api
 import re
 
@@ -50,7 +51,7 @@ for j in user_text:
             # print(f"\n\n{i} using glove: \n",glove_model[i])
             k = glove_model[i]
             m = glove_model[j]
-            lst.append(cosine(m, k))
+            lst.append(cosine(m,k))
         except:
             try:
                 # using word2vec
