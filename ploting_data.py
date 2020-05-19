@@ -41,3 +41,19 @@ def plotting(file_name):
     df.head(10)
     df.plot(kind='bar')
     plt.show()
+
+#ploting multiple graphs
+def plots():
+    df=pd.read_csv('fuzywuzy_data.csv')
+    lf1=df.get(['ratio'])
+    lf2=df.get(['partial_ratio'])
+    lf3=df.get(['token_sort_ratio'])
+    lf4=df.get('token_set_ratio')
+    lf1.plot(kind='hist')
+    plt.show()
+    lf2.plot(kind='hist')
+    plt.show()
+    lf3.plot(kind='hist')
+    plt.show()
+    lf4.plot(kind='hist')
+    plt.show()
