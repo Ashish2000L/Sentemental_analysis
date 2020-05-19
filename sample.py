@@ -140,4 +140,3 @@ def sentence(sent):
     for i in votes:
         list.append(i[0])
     return list
-print(sentence('coron is not dangerous'))

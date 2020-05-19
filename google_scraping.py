@@ -1,8 +1,12 @@
 #import cv2
-import numpy
+#import numpy
 #import pytesseract
 #from PIL import Image
 from interlink import final_output
+from fuzywuzy import str_cmp
+from bs4 import BeautifulSoup
+import requests
+global text
 print("Choose the way you want to input the news: ")
 x = input("I for image and T for text: ")
 if x.upper() == "T":
@@ -48,10 +52,18 @@ def connect(host = 'https://google.com'):
 if connect():
     from googlesearch import search
     query = text
-    for url in search(query, tld='co.in', lang='en', num=10, start=0, stop= 5, pause=2.0):
+    for url in search(query, tld='co.in', lang='en', num=10, start=0, stop= 10, pause=2.0):
         print("\n")
-        print(url)
-        print("\n")
+        #print(url)
+        #print("\n")
+        files=open('url_data.csv','w')
+        URL = url
+        content = requests.get(URL)
+        soup = BeautifulSoup(content.text, 'html.parser')
+        ext_text = soup.find_all('p', limit=8)
+        for para in ext_text:
+            files.write(para.get_text())
+
         from newspaper import Article
 
         # For different language newspaper refer above table
@@ -82,13 +94,13 @@ if connect():
         # To extract keywords of news
         #print("News Keywords:")
         #print(article.keywords)
-        inpt = article.title
-        print(inpt)
-        try:
-            result, confidance = final_output(inpt)
-            print("Final result: ",result, confidance)
-        except Exception as ec:
-            print("\n Unable to find result, please try again later :) ")
+        #inpt = article.summary
+        #print(inpt)
+        #try:
+        #    result, confidance = final_output(inpt)
+        #    print("Final result: ",result, confidance)
+        #except Exception as ec:
+        #    print("\n Unable to find result, please try again later :) ")
 
 
 else:
