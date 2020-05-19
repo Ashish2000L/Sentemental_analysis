@@ -2,9 +2,10 @@ from shortsent import sent
 from nltk.corpus import stopwords
 import nltk
 from gensim.models import Word2Vec
-from scipy.stats import cosine
-#from scipy.spatial.distance import cosine
+#from scipy.stats import cosine
+from scipy.spatial.distance import cosine
 import gensim.downloader as api
+from ploting_data import tsne_plot,plotting
 import re
 
 inpt = input("Enter your text: ")
@@ -15,7 +16,7 @@ text = re.sub(r'\[[0-9]"\]', ' ', paragraph)
 text = re.sub(r"\s+", ' ', text)
 text = text.lower()
 text = re.sub(r'\s+', ' ', text)
-
+file.close()
 user_text = nltk.word_tokenize(output)
 
 sentence = nltk.sent_tokenize(text)
@@ -41,6 +42,7 @@ overall = []
 file = open('neg.txt', 'r')
 x = file.readline()
 line = nltk.word_tokenize(sent(x))
+file.close()
 output=[]
 # for f in line:
 for j in user_text:
@@ -64,8 +66,37 @@ for j in user_text:
                 lst.append([float(1)])
     output.append(lst)
 
-print("\n\n Users text: \n", user_text)
-print("\n\n Doc text: \n", line)
-for i in output:
-    print(i)
-    print('\r')
+#print("\n\n Users text: \n", user_text)
+#print("\n\n Doc text: \n", line)
+file=open('ploting.csv','w')
+file.write('main,')
+k=0
+for i in line:
+    file.write(str(i))
+    file.write(',')
+file.write('\n')
+for i in user_text:
+    file.write(str(i))
+    file.write(',')
+    for j in output[k]:
+        file.write(str(j))
+        file.write(',')
+    k+=1
+    file.write('\n')
+
+print('main',end=',')
+for i in line:
+    print(i,end=',')
+print('\n')
+for i in user_text:
+    print(str(i),end=',')
+    for j in output[k]:
+        print(str(j),end=',')
+    k+=1
+    print('\n')
+
+m=set(user_text).union(set(line))
+txt_lst=[x for x in m]
+
+plotting('ploting.csv')
+tsne_plot(glove_model,txt_lst)
