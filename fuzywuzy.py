@@ -1,7 +1,7 @@
 from fuzzywuzzy import fuzz
 from ploting_data import plots
 def str_cmp(inpts):
-    file=open('pos.txt','r')
+    file=open('url_data.csv','r')
     file1=open('fuzywuzy_data.csv','w')
     file1.write('ratio,partial_ratio,token_sort_ratio,token_set_ratio,none \n')
     for i in file:
@@ -17,3 +17,4 @@ def str_cmp(inpts):
     file.close()
 
     plots()
+    return 0
