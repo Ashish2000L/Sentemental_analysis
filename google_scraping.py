@@ -2,7 +2,7 @@
 #import numpy
 #import pytesseract
 #from PIL import Image
-from interlink import final_output
+#from interlink import final_output
 from fuzywuzy import str_cmp
 from bs4 import BeautifulSoup
 import requests
@@ -41,6 +41,7 @@ main_text = ' '.join(map(str, words))
 #print(main_text)
 
 import urllib.request
+files = open('url_texts.txt', 'w')
 def connect(host = 'https://google.com'):
     try:
         urllib.request.urlopen(host)
@@ -48,22 +49,36 @@ def connect(host = 'https://google.com'):
     except:
         return False
 
-
+file = open("url_data.csv", 'wb')
 if connect():
     from googlesearch import search
     query = text
-    for url in search(query, tld='co.in', lang='en', num=10, start=0, stop= 10, pause=2.0):
+    for url in search(query, tld='co.in', lang='en', num=30, start=0, stop= 20, pause=1.0):
         print("\n")
-        #print(url)
+        print(url)
         #print("\n")
-        files=open('url_data.csv','w')
         URL = url
         content = requests.get(URL)
         soup = BeautifulSoup(content.text, 'html.parser')
         ext_text = soup.find_all('p', limit=8)
-        for para in ext_text:
-            files.write(para.get_text())
 
+        #for para in ext_text:
+        #    i = para.get_text()
+        #    i = i.replace(',', '')
+        #    i = i.replace('”', '')
+        #    i = i.replace('“', '')
+        #    i = i.replace('’', '')
+        #    i=i.replace('–',' ')
+        #    i = i.replace('‘', '')
+        #    i = i.replace('’', '')
+        #    file.write(i)
+        #    files.write(i)
+        #    files.write('\n')
+        #    file.write('\n')
+#
+        ##file.close()
+        #files.write('\n')
+        #str_cmp(text)
         from newspaper import Article
 
         # For different language newspaper refer above table
@@ -102,6 +117,18 @@ if connect():
         #except Exception as ec:
         #    print("\n Unable to find result, please try again later :) ")
 
-
+        i = article.summary
+        i = i.replace(',', '')
+        i = i.replace('”', '')
+        i = i.replace('“', '')
+        i = i.replace('’', '')
+        i = i.replace('–',' ')
+        i = i.replace('‘', '')
+        i = i.replace('’', '')
+        file.write(i.encode())
+        file.write(b'\n')
 else:
     print("not connected")
+file.close()
+x=str_cmp(text)
+files.close()
