@@ -62,7 +62,7 @@ for j in user_text:
                 m = model.wv[j]
                 lst.append([cosine(m,k)])
             except:
-                print(f"\n\n {i}no text exist!! \n")
+                print(f"\n\n {i} no text exist!! \n")
                 lst.append([float(1)])
     output.append(lst)
 
@@ -83,17 +83,6 @@ for i in user_text:
         file.write(',')
     k+=1
     file.write('\n')
-
-print('main',end=',')
-for i in line:
-    print(i,end=',')
-print('\n')
-for i in user_text:
-    print(str(i),end=',')
-    for j in output[k]:
-        print(str(j),end=',')
-    k+=1
-    print('\n')
 
 m=set(user_text).union(set(line))
 txt_lst=[x for x in m]
