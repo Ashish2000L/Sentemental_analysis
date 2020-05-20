@@ -13,7 +13,7 @@ vect = TfidfVectorizer(use_idf=True, lowercase=True, strip_accents='ascii', stop
 
 lst = []
 lst_neg = []
-
+global lt,lt_neg
 
 def value(string1):
     global result
@@ -36,8 +36,10 @@ def value(string1):
             make_text = txt.TextCollection(lst)
 
             output = sent(string)
+            print('passed: sent')
 
             result = sentence(output)
+            print('passed: sentence')
 
             for i in output.split(' '):
                 if i not in lt:
@@ -47,7 +49,7 @@ def value(string1):
                 if j not in lt_neg:
                     lt_neg[j] = make_text_neg.tf_idf(j, output)
 
-
+            print('passed: value')
         except AssertionError as ass:
             print(ass)
 
@@ -59,39 +61,23 @@ def value(string1):
 
 def final_output(string):
     result, lt, lt_neg = value(string)
-
-    file = open('testing_pos.csv', 'w')
-    file_neg = open('testing_neg.csv', 'w')
-
+    print('passed: call->value')
     # to make visulization on each words
-    for z in lt:
-        file.write(z)
-        file.write(',')
-        file.write(str(lt.get(z)))
-        file.write('\n')
 
-    for k in lt_neg:
-        file_neg.write(k)
-        file_neg.write(',')
-        file_neg.write(str(lt_neg.get(k)))
-        file_neg.write('\n')
-    file.close()
-    file_neg.close()
+    pf_pos=[x[1] for x in lt.items()]
+    pf_neg=[x[1] for x in lt_neg.items()]
 
-    # to manually check value of pos and neg
-    pf_pos = pd.read_csv('testing_pos.csv', names=['words', 'tf_idf'])
-    pf_neg = pd.read_csv('testing_neg.csv', names=['words', 'tf_idf'])
-
-    pos_mult = reduce(lambda x, y: x * y, list(filter(lambda a: (a != 0), pf_pos['tf_idf'])))
-    neg_mult = reduce(lambda x, y: x * y, list(filter(lambda a: (a != 0), pf_neg['tf_idf'])))
+    pos_mult = reduce(lambda x, y: x * y, list(filter(lambda a: (a != 0), pf_pos)))
+    neg_mult = reduce(lambda x, y: x * y, list(filter(lambda a: (a != 0), pf_neg)))
 
     total = neg_mult + pos_mult
 
-    pos_percnt = (pos_mult / total) * 100
-    neg_percnt = (neg_mult / total) * 100
+    pos_percnt =int( (pos_mult / total) * 100)
+    neg_percnt =int( (neg_mult / total) * 100)
 
     # to handle error of mode
     try:
+        print('entered in try block')
         res = mode(result)
         confidance = float((result.count(res) / len(result)) * 100)
         if res == 1:
@@ -100,9 +86,15 @@ def final_output(string):
             res = 'Negative'
 
         if confidance > 60:
+            print('value returned')
             return res, confidance
+        else:
+            print(confidance)
+            var=1
+            return var,confidance
 
     except ArithmeticError as ar:
+        print('entered in else block ')
         if pos_percnt > neg_percnt:
             result.append(1)
         else:
@@ -114,4 +106,9 @@ def final_output(string):
         else:
             res = 'Negative'
         if confidance > 60:
+            print('value returned')
             return res, confidance
+        else:
+            print(confidance)
+            var=1
+            return var, confidance
