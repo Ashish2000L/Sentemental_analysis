@@ -117,8 +117,9 @@ svc_classifier.close()
 #svc_classifier.close()
 
 #function to pass the string
-votes=[]
+
 def sentence(sent):
+    votes = []
     vectors=vect.transform(np.array([sent]))#np.array([sent])
     review=gnb.predict(vectors.toarray())
     votes.append(review)
@@ -139,4 +140,5 @@ def sentence(sent):
     list = []
     for i in votes:
         list.append(i[0])
+    print('\n',list)
     return list
