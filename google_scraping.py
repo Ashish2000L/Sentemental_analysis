@@ -2,9 +2,10 @@
 #import numpy
 #import pytesseract
 #from PIL import Image
-#from interlink import final_output
+from interlink import final_output
 from fuzywuzy import str_cmp
 from bs4 import BeautifulSoup
+from statistics import mode
 import requests
 global text
 print("Choose the way you want to input the news: ")
@@ -21,6 +22,7 @@ elif x.upper() == "I":
     #print(text)
 else:
     print("Invalid input")
+    quit(0)
 import nltk
 from nltk.tokenize import word_tokenize
 tokens = word_tokenize(text)
@@ -49,86 +51,99 @@ def connect(host = 'https://google.com'):
     except:
         return False
 
+count=0
+lst=[]
 file = open("url_data.csv", 'wb')
 if connect():
     from googlesearch import search
-    query = text
-    for url in search(query, tld='co.in', lang='en', num=30, start=0, stop= 20, pause=1.0):
-        print("\n")
-        print(url)
-        #print("\n")
-        URL = url
-        content = requests.get(URL)
-        soup = BeautifulSoup(content.text, 'html.parser')
-        ext_text = soup.find_all('p', limit=8)
+    query = text    #co.in
+    for url in search(query, tld='com', lang='en', start=0, pause=1.0):
+        try:
+            #print("\n")
+            #print("\n")
+            URL = url
+            content = requests.get(URL)
+            soup = BeautifulSoup(content.text, 'html.parser')
+            ext_text = soup.find_all('p', limit=8)
 
-        #for para in ext_text:
-        #    i = para.get_text()
-        #    i = i.replace(',', '')
-        #    i = i.replace('”', '')
-        #    i = i.replace('“', '')
-        #    i = i.replace('’', '')
-        #    i=i.replace('–',' ')
-        #    i = i.replace('‘', '')
-        #    i = i.replace('’', '')
-        #    file.write(i)
-        #    files.write(i)
-        #    files.write('\n')
-        #    file.write('\n')
-#
-        ##file.close()
-        #files.write('\n')
-        #str_cmp(text)
-        from newspaper import Article
+            #for para in ext_text:
+            #    i = para.get_text()
+            #    i = i.replace(',', '')
+            #    i = i.replace('”', '')
+            #    i = i.replace('“', '')
+            #    i = i.replace('’', '')
+            #    i=i.replace('–',' ')
+            #    i = i.replace('‘', '')
+            #    i = i.replace('’', '')
+            #    file.write(i)
+            #    files.write(i)
+            #    files.write('\n')
+            #    file.write(b'\n')
+##
+            ##file.close()
+            #files.write('\n')
+            #str_cmp(text)
+            from newspaper import Article
+            from newspaper import Config
 
-        # For different language newspaper refer above table
-        article = Article(url, language="en")  # en for English
+            user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
+            config=Config()
+            config.browser_user_agent=user_agent
+            # For different language newspaper refer above table
+            article = Article(url, language="en",config=config)  # en for English
 
-        # To download the article
-        article.download()
+            # To download the article
+            article.download()
 
-        # To parse the article
-        article.parse()
+            # To parse the article
+            article.parse()
 
-        # To perform natural language processing ie..nlp
-        article.nlp()
+            # To perform natural language processing ie..nlp
+            article.nlp()
 
-        # To extract title
-        #print("News Title:")
-        #print(article.title)
-        #print("\n")
-        # To extract complete Text of news
-        #print("News Text:")
-        #print(article.text)
-        #print("\n")
-        # To extract Summary of news
-        #print("News Summary:")
-        #print(article.summary)
-        #print("\n")
+            i = article.summary
+            i = i.replace(',', '')
+            i = i.replace('”', '')
+            i = i.replace('“', '')
+            i = i.replace('’', '')
+            i = i.replace('–', ' ')
+            i = i.replace('‘', '')
+            i = i.replace('’', '')
+            i = i.replace("'", '')
+            i = i.replace('"', '')
+            #try:
+            result, confidance = final_output(i)
+            if result=='Positive':
+                print(url)
+                print("Final result: ", result, confidance)
+                count+=1
+                lst.append(1)
+            elif result == 'Negative':
+                print(url)
+                print("Final result: ", result, confidance)
+                count+=1
+                lst.append(0)
+            #except Exception as ec:
+            #    print("\n Unable to find result, please try again later :) ")
+            #    lst.append(-1)
 
-        # To extract keywords of news
-        #print("News Keywords:")
-        #print(article.keywords)
-        #inpt = article.summary
-        #print(inpt)
-        #try:
-        #    result, confidance = final_output(inpt)
-        #    print("Final result: ",result, confidance)
-        #except Exception as ec:
-        #    print("\n Unable to find result, please try again later :) ")
-
-        i = article.summary
-        i = i.replace(',', '')
-        i = i.replace('”', '')
-        i = i.replace('“', '')
-        i = i.replace('’', '')
-        i = i.replace('–',' ')
-        i = i.replace('‘', '')
-        i = i.replace('’', '')
-        file.write(i.encode())
-        file.write(b'\n')
+            file.write(i.encode())
+            file.write(b'\n')
+            #count+=1
+            if(count==40):
+                break
+        except Exception as ex:
+            continue
 else:
     print("not connected")
 file.close()
+finl_relult=mode(lst)
+if finl_relult==1:
+    print("\n\n\t\t",'Positive')
+elif finl_relult==0:
+    print('\n\n\t\t','Negative')
+else:
+    print('\n\n\t\t Cannot predict')
+
 x=str_cmp(text)
 files.close()
