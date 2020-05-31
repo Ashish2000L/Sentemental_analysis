@@ -47,7 +47,7 @@ def sent(string):
     tokeniz = word_tokenize(string)  # to tokenize words
     newlst, loop_time = eng_connections(tokeniz)  # handle words like don't, won't, counldn't etc.
     sit = [x.lower() for x in newlst]  # all words in lowercase
-    symb = "!|\#$%^&*()+=-_~`<>.,?/:;{}[]"
+    symb = "!|\#$%^&*()+=-_~`<>,?/:;{}[]"
     sym = [i for i in sit if i not in list(symb)]  # Removed symbols
     stop = [i for i in sym if i not in stop_words]  # removed stopwords
     tokens = nltk.pos_tag(stop)  # added pos to list

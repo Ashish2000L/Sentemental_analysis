@@ -123,9 +123,6 @@ if connect():
                 print("Final result: ", result, confidance)
                 count+=1
                 lst.append(0)
-            #except Exception as ec:
-            #    print("\n Unable to find result, please try again later :) ")
-            #    lst.append(-1)
 
             file.write(i.encode())
             file.write(b'\n')
