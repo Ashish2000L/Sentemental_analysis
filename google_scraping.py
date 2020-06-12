@@ -79,7 +79,7 @@ if connect():
             #    files.write(i)
             #    files.write('\n')
             #    file.write(b'\n')
-##
+
             ##file.close()
             #files.write('\n')
             #str_cmp(text)
@@ -127,7 +127,7 @@ if connect():
             file.write(i.encode())
             file.write(b'\n')
             #count+=1
-            if(count==40):
+            if(count==23):
                 break
         except Exception as ex:
             continue
